@@ -1,9 +1,9 @@
 const ListGroup = (props) => {
-    const { items } =props;
+    const { items, valueProperty, textProperty } =props;
  
  return (  
         <ul className="list-group">
-            { items.map(item =>  <li key = { item._id } className="list-group-item">{ item.name }</li>)}
+            { items.map(item =>  <li key = { item[valueProperty] } className="list-group-item">{ item[textProperty] }</li>)}
  
      
 </ul>
