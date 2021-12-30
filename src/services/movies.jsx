@@ -35,11 +35,17 @@ class Movies extends React.Component {
        this.setState({currentPage: page});
      }
 
+     handleGenreSelect = genre => {
+       this.setState({ selectedGenre:genre })
+     }
+
     render() { 
         const {length:count } = this.state.movies;
-        const { pageSize, currentPage, movies:allMovies } = this.state;
+        const { pageSize, currentPage, selectedGenre, movies:allMovies } = this.state;
 
-     const movies = Paginate(allMovies, currentPage, pageSize)
+        const filtered = selectedGenre ? allMovies.filter(m => m.genre._id === selectedGenre._id)  : allMovies;
+
+     const movies = Paginate(filtered, currentPage, pageSize)
 
 
               if( count === 0) return 'No movies to display';        
@@ -52,13 +58,14 @@ class Movies extends React.Component {
                         items = { this.state.genres }
                         textProperty = "name"
                         valueProperty = "_id"
+                        selectedItem = { this.state.selectedGenre }
                         onItemSelect = { this.handleGenreSelect }
                         
                         />
                       </div>
 
                       <div className="col">
-                      <p>showing { count } movies in the database.</p>
+                      <p>showing { filtered.length } movies in the database.</p>
 
             <table className="table">
             <thead>
@@ -91,7 +98,7 @@ class Movies extends React.Component {
             </tbody>
             </table>
             <Pagination 
-            itemsCount={ count } 
+            itemsCount={ filtered.length } 
             pageSize={ pageSize } 
             currentPage = { currentPage }
             onPageChange= { this.handlePageChange }
