@@ -1,9 +1,7 @@
 import Like from '../common/like';
 
 
-const MovieTable = (props) => {
-     const { movies, onDelete, onLike } = props
-
+const MovieTable = ({ movies, onDelete, onLike }) => {
 
     return ( 
         <table className="table">
