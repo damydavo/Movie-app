@@ -3,6 +3,7 @@ import Movies from './components/movies';
 import Customers from './components/customers';
 import Rentals from './components/rentals';
 import NotFound from './components/notFound';
+import LoginForm from './components/loginForm';
 import './App.css';
 import NavBar from './components/navBar';
 
@@ -13,6 +14,7 @@ function App() {
     <NavBar/>
     <main className="container">
       <Switch>
+      <Route path="/login" component= {LoginForm} />
       <Route path="/movies" component= {Movies} />
       <Route path="/customers" component= {Customers} />
       <Route path="/rentals" component= {Rentals} />
