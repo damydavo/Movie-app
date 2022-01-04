@@ -16,7 +16,7 @@ class LoginForm extends React.Component {
           errors.username = 'Username cannot be empty';
 
           if(account.password.trim() === '')
-          errors.password= 'Password cannot be empty';
+          errors.password = 'Password cannot be empty';
          
           return Object.keys(errors).length === 0 ? null : errors;
     }
@@ -35,9 +35,24 @@ class LoginForm extends React.Component {
     }
 
     handleChange = ({ currentTarget:input }) => {
+      const errors = {...this.state.errors}
+      const errorMessage = this.ValidateProperty(input);
+      if (errorMessage) errors[input.name] = errorMessage;
+      else delete errors[input.name]; 
+
        const account = {...this.state.account};
        account[input.name] = input.value;
-       this.setState({ account });
+       this.setState({ account, errors });
+    }
+
+    ValidateProperty = input => {
+       if(input.name === 'username') {
+           if(input.value.trim() === '') return 'Username cannot be empty';
+       }
+
+       if(input.name === 'password') {
+        if(input.value.trim() === '') return 'Password cannot be empty';
+    }
     }
 
     render() { 
