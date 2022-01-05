@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Joi from 'joi-browser';
 import Input from './../common/input';
 
 class LoginForm extends React.Component {
@@ -8,23 +9,44 @@ class LoginForm extends React.Component {
         errors: {}
     } 
 
-    Validate = () => {
-          const { account } = this.state;
-          const errors = {};
+  schema = { 
+      username: Joi.string().required().label('Username'),
+      password: Joi.string().required().label('Password')
+  }
 
-          if(account.username.trim() === '')
-          errors.username = 'Username cannot be empty';
+    validate = () => {
 
-          if(account.password.trim() === '')
-          errors.password = 'Password cannot be empty';
+        const result = Joi.validate(this.state.account, this.schema, { abortEarly: false });
+        console.log(result);
+         if (!result.error) return null;
+
+         const errors = {};
+
+         for(let item of result.error.details)
+         errors[item.path[0]] = item.message;
+
+         return errors;
          
-          return Object.keys(errors).length === 0 ? null : errors;
-    }
+         }
+
+
+
+        //   const errors = {};
+
+        //   const { account } = this.state;
+        //   if(account.username.trim() === '')
+        //   errors.username = 'Username cannot be empty';
+
+        //   if(account.password.trim() === '')
+        //   errors.password = 'Password cannot be empty';
+         
+        //   return Object.keys(errors).length === 0 ? null : errors;
+    
 
     handleSubmit = e => {
         e.preventDefault()
 
-        const errors = this.Validate();
+        const errors = this.validate();
 
         this.setState({errors});
         if(errors) return
@@ -36,7 +58,7 @@ class LoginForm extends React.Component {
 
     handleChange = ({ currentTarget:input }) => {
       const errors = {...this.state.errors}
-      const errorMessage = this.ValidateProperty(input);
+      const errorMessage = this.validateProperty(input);
       if (errorMessage) errors[input.name] = errorMessage;
       else delete errors[input.name]; 
 
@@ -45,7 +67,7 @@ class LoginForm extends React.Component {
        this.setState({ account, errors });
     }
 
-    ValidateProperty = input => {
+    validateProperty = input => {
        if(input.name === 'username') {
            if(input.value.trim() === '') return 'Username cannot be empty';
        }
